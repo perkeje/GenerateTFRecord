@@ -85,14 +85,14 @@ def xml_to_csv(path):
             value = (root.find('filename').text,
                      int(root.find('size')[0].text),
                      int(root.find('size')[1].text),
-                     member['name'].text,
-                     member['pose'].text,
-                     member['truncated'].text,
-                     member['difficult'].text,
-                     int(member['bndbox'][0].text),
-                     int(member['bndbox'][1].text),
-                     int(member['bndbox'][2].text),
-                     int(member['bndbox'][3].text)
+                     member.find('name').text,
+                     member.find('pose').text,
+                     member.find('truncated').text,
+                     member.find('difficult').text,
+                     int(member.find('bndbox')[0].text),
+                     int(member.find('bndbox')[1].text),
+                     int(member.find('bndbox')[2].text),
+                     int(member.find('bndbox')[3].text)
                      )
             xml_list.append(value)
     column_name = ['filename', 'width', 'height',

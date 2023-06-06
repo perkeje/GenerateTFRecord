@@ -77,7 +77,7 @@ def xml_to_csv(path):
         The produced dataframe
     """
 
-  xml_list = [] 
+  xml_list = []
   for xml_file in glob.glob(path + '/*.xml'):
       tree = ET.parse(xml_file)
       root = tree.getroot()

@@ -77,7 +77,7 @@ def xml_to_csv(path):
         The produced dataframe
     """
 
-    xml_list = []
+   xml_list = []
     for xml_file in glob.glob(path + '/*.xml'):
         tree = ET.parse(xml_file)
         root = tree.getroot()
@@ -89,16 +89,17 @@ def xml_to_csv(path):
                      member.find('pose').text,
                      member.find('truncated').text,
                      member.find('difficult').text,
-                     int(member.find('bndbox')[0].text),
-                     int(member.find('bndbox')[1].text),
-                     int(member.find('bndbox')[2].text),
-                     int(member.find('bndbox')[3].text)
+                     int(member.find('bndbox').find('xmin').text),
+                     int(member.find('bndbox').find('ymin').text),
+                     int(member.find('bndbox').find('xmax').text),
+                     int(member.find('bndbox').find('ymax').text)
                      )
             xml_list.append(value)
     column_name = ['filename', 'width', 'height',
                    'class', 'pose', 'truncated', 'difficult', 'xmin', 'ymin', 'xmax', 'ymax']
     xml_df = pd.DataFrame(xml_list, columns=column_name)
     return xml_df
+
 
 
 def class_text_to_int(row_label):

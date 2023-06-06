@@ -77,28 +77,28 @@ def xml_to_csv(path):
         The produced dataframe
     """
 
-   xml_list = []
-    for xml_file in glob.glob(path + '/*.xml'):
-        tree = ET.parse(xml_file)
-        root = tree.getroot()
-        for member in root.findall('object'):
-            value = (root.find('filename').text,
-                     int(root.find('size')[0].text),
-                     int(root.find('size')[1].text),
-                     member.find('name').text,
-                     member.find('pose').text,
-                     member.find('truncated').text,
-                     member.find('difficult').text,
-                     int(member.find('bndbox').find('xmin').text),
-                     int(member.find('bndbox').find('ymin').text),
-                     int(member.find('bndbox').find('xmax').text),
-                     int(member.find('bndbox').find('ymax').text)
-                     )
-            xml_list.append(value)
-    column_name = ['filename', 'width', 'height',
-                   'class', 'pose', 'truncated', 'difficult', 'xmin', 'ymin', 'xmax', 'ymax']
-    xml_df = pd.DataFrame(xml_list, columns=column_name)
-    return xml_df
+  xml_list = [] 
+  for xml_file in glob.glob(path + '/*.xml'):
+      tree = ET.parse(xml_file)
+      root = tree.getroot()
+      for member in root.findall('object'):
+          value = (root.find('filename').text,
+                   int(root.find('size')[0].text),
+                   int(root.find('size')[1].text),
+                   member.find('name').text,
+                   member.find('pose').text,
+                   member.find('truncated').text,
+                   member.find('difficult').text,
+                   int(member.find('bndbox').find('xmin').text),
+                   int(member.find('bndbox').find('ymin').text),
+                   int(member.find('bndbox').find('xmax').text),
+                   int(member.find('bndbox').find('ymax').text)
+                   )
+          xml_list.append(value)
+  column_name = ['filename', 'width', 'height',
+                 'class', 'pose', 'truncated', 'difficult', 'xmin', 'ymin', 'xmax', 'ymax']
+  xml_df = pd.DataFrame(xml_list, columns=column_name)
+  return xml_df
 
 
 

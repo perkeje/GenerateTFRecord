@@ -117,7 +117,15 @@ def create_tf_example(group, path):
         encoded_png = fid.read()
     encoded_png_io = io.BytesIO(encoded_png)
     image = Image.open(encoded_png_io)
+    original_width, original_height = image.size
+    desired_size = (416, 416)  # Set the desired dimensions here
+    image = image.resize(desired_size, Image.ANTIALIAS)
+    # Update width and height to match new image size
     width, height = image.size
+    # Convert back to bytes
+    output_io = io.BytesIO()
+    image.save(output_io, format='PNG')
+    encoded_png = output_io.getvalue()
     key = hashlib.sha256(encoded_png).hexdigest()
 
     filename = group.filename.encode('utf8')
@@ -133,10 +141,10 @@ def create_tf_example(group, path):
     difficult_obj = []
 
     for index, row in group.object.iterrows():
-        xmins.append(row['xmin'] / width)
-        xmaxs.append(row['xmax'] / width)
-        ymins.append(row['ymin'] / height)
-        ymaxs.append(row['ymax'] / height)
+        xmins.append((row['xmin'] / original_width) * width)
+        xmaxs.append((row['xmax'] / original_width) * width)
+        ymins.append((row['ymin'] / original_height) * height)
+        ymaxs.append((row['ymax'] / original_height) * height)
         classes_text.append(row['class'].encode('utf8'))
         classes.append(class_text_to_int(row['class']))
         truncated.append(int(row['truncated']))
@@ -162,6 +170,7 @@ def create_tf_example(group, path):
         'image/object/view': dataset_util.bytes_list_feature(poses),
     }))
     return tf_example
+
 
 
 def main(_):
